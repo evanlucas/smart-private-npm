@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/nodejitsu/smart-private-npm",
   "dependencies": {
+    "JSONStream": "^0.8.0",
     "create-servers": "~1.2.0",
     "director": "~1.2.2",
     "http-proxy": "~1.0.1",
