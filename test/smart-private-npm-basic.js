@@ -100,7 +100,7 @@ describe('smart-private-npm basic', function() {
             uri: common.host + p,
             json: true
           }
-          request.get(opts, common.publicOk(done))
+          request.get(opts, common.mergeOk(done))
         })
       })
     })

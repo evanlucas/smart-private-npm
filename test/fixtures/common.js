@@ -125,6 +125,44 @@ exports.error = function(done) {
   }
 }
 
+exports.mergeOk = function(done) {
+  return function(err, res, body) {
+    if (err) return done(err)
+    if (res.statusCode !== 200) {
+      return exports.wrongStatusCode(res.statusCode, 200, done)
+    }
+    if (!body.hasOwnProperty('private')) {
+      var msg = 'body should have `private` key'
+      return done(new Error(msg))
+    }
+
+    if (!body.hasOwnProperty('public')) {
+      var msg = 'body should have `public` key'
+      return done(new Error(msg))
+    }
+    done()
+  }
+}
+
+exports.mergeOkTxt = function(done) {
+  return function(err, res, body) {
+    if (err) return done(err)
+    if (res.statusCode !== 200) {
+      return exports.wrongStatusCode(res.statusCode, 200, done)
+    }
+    if (!~body.indexOf('private')) {
+      var msg = 'body should contain `private: true`'
+      return done(new Error(msg))
+    }
+
+    if (!~body.indexOf('public')) {
+      var msg = 'body should contain `public: true`'
+      return done(new Error(msg))
+    }
+    done()
+  }
+}
+
 exports.list = {
   get: [
       '/-/jsonp/jsonp_blah'
@@ -146,7 +184,9 @@ exports.list = {
     , '/-/_view/all'
     , '/-/_list/all'
     , '/-/_show/all'
-    , '/-/users'
+  ],
+  get_users: [
+      '/-/users'
     , '/-/user/user_blah'
     , '/_users/user_blah'
     , '/-/user-by-email/user_blah'

@@ -22,6 +22,22 @@ function handle(req, res) {
     case '/wl-ok-put':
     case '/':
     case '/favicon.ico':
+    case '/-/users':
+    case '/-/user/user_blah':
+    case '/_users/user_blah':
+    case '/-/user-by-email/user_blah':
+    case '/-/user/user_blah':
+    case '/_users/user_blah':
+    case '/public_users/user_blah':
+      pkgOk(req, res)
+      break
+    case '/pub-error':
+      pkgError(req, res)
+      break
+    case '/merge/json':
+      pkgMergeJSON(req, res)
+      break
+    case '/merge/txt':
     case '/-/jsonp/jsonp_blah':
     case '/-/all/since':
     case '/-/rss':
@@ -41,17 +57,11 @@ function handle(req, res) {
     case '/-/_view/all':
     case '/-/_list/all':
     case '/-/_show/all':
-    case '/-/users':
-    case '/-/user/user_blah':
-    case '/_users/user_blah':
-    case '/-/user-by-email/user_blah':
-    case '/-/user/user_blah':
-    case '/_users/user_blah':
-    case '/public_users/user_blah':
-      pkgOk(req, res)
-      break
-    case '/pub-error':
-      pkgError(req, res)
+      if (req.headers['accept'] === 'application/json') {
+        pkgMergeJSON(req, res)
+      } else {
+        pkgMergeText(req, res)
+      }
       break
     case '/pub-basic-notfound':
     default:
@@ -64,6 +74,19 @@ function pkgOk(req, res) {
   common.json(res, 200, {
     server: 'public'
   })
+}
+
+function pkgMergeJSON(req, res) {
+  common.json(res, 200, {
+    public: true
+  })
+}
+
+function pkgMergeText(req, res) {
+  res.writeHead(200, {
+    'Content-Type': 'text/plain'
+  })
+  res.end('public: true')
 }
 
 function pkgNotFound(req, res) {
